@@ -38,6 +38,13 @@ if not exist ".git" (
     git branch -M main
 )
 
+:: Ensure identity is configured
+git config user.name >nul 2>&1
+if !errorlevel! neq 0 (
+    git config user.name "Plant Health Developer"
+    git config user.email "developer@planthealth.local"
+)
+
 echo [2/3] Staging project files...
 git add .
 git commit -m "Deploy Plant Health Detection App with Docker & FastAPI" >nul 2>&1
