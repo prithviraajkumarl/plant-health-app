@@ -1,0 +1,8 @@
+app/.venv/
+**/__pycache__/
+*.pyc
+app/tools/cloudflared.exe
+app/runtime/connection.json
+app/runtime/tunnel.log
+.git/
+.vscode/

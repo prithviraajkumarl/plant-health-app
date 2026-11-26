@@ -1,0 +1,40 @@
+{
+  "name": "PlantVillage MobileNetV2 Disease Classifier",
+  "version": "1.0.0",
+  "architecture": "MobileNetV2",
+  "format": "TensorFlow Lite (.tflite)",
+  "file": "plant_disease_model.tflite",
+  "size_bytes": 11572700,
+  "input": {
+    "shape": [1, 224, 224, 3],
+    "dtype": "float32",
+    "color_space": "RGB",
+    "normalization": "[0.0, 1.0] (pixel_value / 255.0)"
+  },
+  "output": {
+    "shape": [1, 38],
+    "dtype": "float32",
+    "activation": "Softmax"
+  },
+  "dataset": "PlantVillage Dataset (54,306 images across 14 crop species and 38 classes)",
+  "num_classes": 38,
+  "crops_covered": [
+    "Apple",
+    "Blueberry",
+    "Cherry",
+    "Corn (Maize)",
+    "Grape",
+    "Orange",
+    "Peach",
+    "Pepper (Bell)",
+    "Potato",
+    "Raspberry",
+    "Soybean",
+    "Squash",
+    "Strawberry",
+    "Tomato"
+  ],
+  "license": "MIT License",
+  "source_repository": "https://github.com/obeshor/Plant-Diseases-Detector",
+  "confidence_threshold": 0.60
+}

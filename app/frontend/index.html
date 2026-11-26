@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Plant Health Detection App</title>
+  <meta name="description" content="AI plant disease diagnosis with instant care and agronomic treatment advice">
+  <meta name="theme-color" content="#1b4332">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/vendor/icon.png">
+  <link rel="apple-touch-icon" href="/vendor/icon.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand" id="brandLogo">
+        <span class="brand-icon">🌱</span>
+        <span>PlantHealth AI</span>
+      </div>
+      <div class="header-actions">
+        <div class="mode-badge" id="modeBadge">
+          <span class="mode-dot"></span> Loading...
+        </div>
+        <button class="btn-qr-pill" id="btnOpenQr" title="Open Phone QR Code">
+          <span>📱</span> Connect Phone
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="app-nav">
+    <div class="nav-container">
+      <div class="nav-tab active" data-view="scan">
+        <span>📷</span> Scan Leaf
+      </div>
+      <div class="nav-tab" data-view="history">
+        <span>🕒</span> History
+      </div>
+      <div class="nav-tab" data-view="diseases">
+        <span>📖</span> Plant Guide
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Views Container -->
+  <main class="app-main">
+
+    <!-- VIEW 1: SCAN -->
+    <section class="view-section active" id="scanView">
+      
+      <!-- AutoSim Banner -->
+      <div class="autosim-card">
+        <div class="autosim-header">
+          <div class="autosim-title">
+            <span>⚡</span> One-Click AutoSim Demo
+          </div>
+        </div>
+        <p class="autosim-desc">
+          Test the entire AI diagnosis pipeline immediately using a bundled sample leaf, persist the analysis to SQLite, and generate the mobile connection QR code.
+        </p>
+        <button class="btn-autosim-main" id="btnAutoSim">
+          <span>▶</span> Run AutoSim Analysis
+        </button>
+      </div>
+
+      <!-- Main Capture Card -->
+      <div class="capture-card">
+        <h2 class="section-title">
+          <span>🔍</span> Analyze a Plant Leaf
+        </h2>
+
+        <!-- Insecure context banner for HTTP LAN mode -->
+        <div class="context-notice" id="contextNotice" style="display: none;">
+          <!-- Dynamically populated if on HTTP -->
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">🍃</div>
+          <div class="dropzone-text">Drag & drop a leaf photo here</div>
+          <div class="dropzone-subtext">or tap anywhere to browse files (JPEG, PNG, WebP)</div>
+        </div>
+
+        <!-- 3 Image Input Options -->
+        <div class="capture-options-grid">
+          <button class="btn-option primary-option" id="btnStartCamera">
+            <span>📷</span> In-App Live Camera
+          </button>
+          <button class="btn-option" id="btnOpenGallery">
+            <span>📁</span> Choose from Gallery
+          </button>
+          <button class="btn-option" id="btnNativeCam">
+            <span>📱</span> Phone Camera (Direct)
+          </button>
+        </div>
+
+        <!-- Hidden Native File Inputs -->
+        <input type="file" id="galleryInput" class="hidden-input" accept="image/jpeg,image/png,image/webp">
+        <input type="file" id="nativeCameraInput" class="hidden-input" accept="image/*" capture="environment">
+      </div>
+
+    </section>
+
+    <!-- VIEW 2: RESULT -->
+    <section class="view-section" id="resultView">
+      <div class="result-card">
+        <div class="result-header-row">
+          <div class="plant-badge" id="resPlantBadge">🌱 Tomato</div>
+          <div class="status-badge" id="resStatusBadge">✓ Healthy</div>
+        </div>
+
+        <div class="result-main-grid">
+          <div class="result-image-box">
+            <img id="resImage" src="" alt="Analyzed leaf">
+          </div>
+
+          <div class="result-details-box">
+            <h1 class="diagnosis-title" id="resDiagnosisTitle">Tomato - Early Blight</h1>
+
+            <!-- Confidence Bar -->
+            <div class="confidence-meter-box">
+              <div class="confidence-label-row">
+                <span>Model Confidence</span>
+                <span class="confidence-val" id="resConfidenceVal">94.8%</span>
+              </div>
+              <div class="confidence-bar-bg">
+                <div class="confidence-bar-fill" id="resConfidenceBar" style="width: 94.8%;"></div>
+              </div>
+            </div>
+
+            <!-- Low Confidence Alert -->
+            <div class="low-confidence-alert" id="resLowConfAlert" style="display: none;">
+              <span style="font-size: 1.3rem;">⚠️</span>
+              <div>
+                <strong>Confidence is low:</strong> The model is not fully sure of this diagnosis. The leaf symptoms may be ambiguous or outside the trained dataset. Please take a clearer photo in good lighting focusing on a single leaf.
+              </div>
+            </div>
+
+            <!-- Agronomic Advice Accordion -->
+            <div class="advice-section">
+              <div class="advice-title"><span>📋</span> Diagnosis Overview</div>
+              <div class="advice-body" id="resDesc">-</div>
+            </div>
+
+            <div class="advice-section">
+              <div class="advice-title"><span>🔬</span> Cause & Pathogen</div>
+              <div class="advice-body" id="resCause">-</div>
+            </div>
+
+            <div class="advice-section" style="border-left: 4px solid var(--primary);">
+              <div class="advice-title"><span>💊</span> Recommended Treatment</div>
+              <div class="advice-body" id="resTreatment">-</div>
+            </div>
+
+            <div class="advice-section">
+              <div class="advice-title"><span>🛡️</span> Prevention & Management</div>
+              <div class="advice-body" id="resPrevention">-</div>
+            </div>
+
+            <!-- Alternative Predictions -->
+            <div class="alt-preds-box" id="resAltPredsBox" style="display: none;">
+              <div class="alt-preds-title">Alternative Possibilities</div>
+              <div id="resAltPredsList"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+              <button class="btn-action btn-primary" id="btnScanAnother">
+                <span>📷</span> Scan Another Leaf
+              </button>
+              <button class="btn-action btn-secondary" id="btnResultQr">
+                <span>📱</span> Open on Phone
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: HISTORY -->
+    <section class="view-section" id="historyView">
+      <div class="history-controls">
+        <h2 class="section-title" style="margin-bottom: 0;">
+          <span>🕒</span> Past Diagnoses
+        </h2>
+        <button class="btn-option" id="btnClearHistory" style="padding: 6px 14px; font-size: 0.85rem;">
+          <span>🗑️</span> Clear History
+        </button>
+      </div>
+
+      <div class="history-grid" id="historyList">
+        <!-- History items loaded dynamically -->
+      </div>
+
+      <div class="empty-state" id="historyEmpty" style="display: none;">
+        <div class="empty-state-icon">🌱</div>
+        <h3>No Scans Yet</h3>
+        <p>Your analyzed plant diagnoses will be stored here in SQLite.</p>
+      </div>
+    </section>
+
+    <!-- VIEW 4: DISEASES GUIDE -->
+    <section class="view-section" id="diseasesView">
+      <h2 class="section-title">
+        <span>📖</span> Crop Disease Reference Guide
+      </h2>
+      <div class="search-bar-box">
+        <input type="text" class="search-input" id="diseaseSearchInput" placeholder="Search by crop (e.g., Tomato, Apple, Corn) or disease...">
+      </div>
+
+      <div class="disease-catalog-list" id="diseaseCatalogList">
+        <!-- Loaded dynamically from database -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Live Camera Modal -->
+  <div class="modal-overlay" id="cameraModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Take Leaf Photo</h3>
+        <button class="btn-close-modal" id="btnCloseCamera">&times;</button>
+      </div>
+      <div class="camera-view-container">
+        <video id="cameraVideo" autoplay playsinline muted></video>
+      </div>
+      <div class="camera-controls">
+        <button class="btn-flip-cam" id="btnFlipCam" title="Switch Camera">🔄</button>
+        <button class="btn-shutter" id="btnShutter" title="Capture Photo"></button>
+        <div style="width: 44px;"></div> <!-- balance spacing -->
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📱 Connect Mobile Device</h3>
+        <button class="btn-close-modal" id="btnCloseQr">&times;</button>
+      </div>
+      <div class="qr-modal-body">
+        <p style="font-size: 0.9rem; color: #4b5563; margin-bottom: 12px;" id="qrModeDesc">
+          Scan this QR code with your phone camera to open the application:
+        </p>
+        <div class="qr-box" id="qrContainer"></div>
+        <div class="qr-url-box" id="qrUrlText">http://localhost:8000</div>
+        <button class="btn-action btn-primary" id="btnCopyQrUrl" style="width: 100%;">
+          <span>📋</span> Copy URL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Analyzing leaf patterns...</div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>Plant Health Detection App • MobileNet TFLite Inference & SQLite Database</p>
+  </footer>
+
+  <!-- Bundled local QR Code generator and client scripts -->
+  <script src="/vendor/qrcode.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "Plant Health Detection App",
+  "short_name": "PlantHealth",
+  "description": "On-device AI plant disease diagnosis and agronomic care guide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f9f4",
+  "theme_color": "#2d6a4f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vendor/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/vendor/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

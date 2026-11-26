@@ -1,0 +1,10 @@
+app/.venv/
+**/__pycache__/
+*.pyc
+app/uploads/*.jpg
+app/uploads/thumbs/*.jpg
+app/tools/cloudflared.exe
+app/runtime/connection.json
+app/runtime/tunnel.log
+.DS_Store
+Thumbs.db
